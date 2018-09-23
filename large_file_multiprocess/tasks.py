@@ -196,17 +196,21 @@ class Task3:
                 raise TypeError('Object must be subtype of Task')
         oldest = [task.get_state()[0] for task in task_objects]
         newest = [task.get_state()[1] for task in task_objects]
-
+        # pp(oldest)
         # Transpose list of dict [{'host1': h1t1, 'host2': h2t1, ...}, ...]
         # to dict of hosts {'host1': [h1t1, h1t2,...], ...}
-        transposed_oldest = {k: [dic[k] for dic in oldest] for k in oldest[0]}
-        transposed_newest = {k: [dic[k] for dic in newest] for k in newest[0]}
+        transposed_oldest = {key: [] for key in {k for d in oldest for k in d}}
+        for d in oldest:
+            for k, v in d.items():
+                transposed_oldest[k].append(v)
+
+        transposed_newest = {key: [] for key in {k for d in oldest for k in d}}
+        for d in newest:
+            for k, v in d.items():
+                transposed_newest[k].append(v)
 
         per_host_oldest = {k: min(v) for k, v in transposed_oldest.items()}
         per_host_newest = {k: max(v) for k, v in transposed_newest.items()}
-
-        # pp(per_host_oldest)
-        # pp(per_host_newest)
 
         return Task3Results(min(per_host_oldest.values()), max(per_host_newest.values()),
                             {'oldest': per_host_oldest,

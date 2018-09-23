@@ -23,10 +23,17 @@ class FileProcessor:
         chunk_size: Size of chunk (number of lines in file)
         parser: Parser for parsing each line, default bsd_parser
 
+    Raises:
+        TypeError: If element of task is not subclass of class Task
+
     """
 
     def __init__(self, file_path, tasks, *, file_mode='rb', num_of_process=None, chunk_size=None, parser=None):
         self._file_path = file_path
+
+        for t in tasks:
+            if issubclass(t, Task):
+                raise TypeError("Element of task '{t}' must be subclass of Task class".format(t))
         self._tasks = tasks
 
         self._mode = 'rb' if file_mode == 'rb' else 'r'
@@ -77,6 +84,8 @@ class FileProcessor:
         """
         chunk_start, chunk_end = chunk
 
+        # print('Processed by PID: ', current_process().pid)
+
         with open(self._file_path, self._mode) as f:
             ichunk = islice(f, chunk_start, chunk_end)
 
@@ -96,7 +105,7 @@ class FileProcessor:
         """
         Run processes from pool of processes and aggregate results.
         """
-        # pp(list(self.chunks_position_generator()).__len__())
+        pp(list(self.chunks_position_generator()).__len__())
 
         st = timer()
         with Pool(self._num_of_process) as p:
@@ -128,7 +137,6 @@ if __name__ == '__main__':
     tasks = [Task1, Task2, Task3]
     fp = FileProcessor(FILE_PATH, tasks)
     fp.run()
-    # pp(fp.results)
 
     print('*********************************************************************')
     print('*********** Average length of the MSG part of the messages **********')
@@ -159,11 +167,9 @@ if __name__ == '__main__':
     print('Globally newest message is from: {0}'.format(fp.results['Task3'].newest.strftime('%b %d %H:%M:%S')))
     print('Per host oldest: ')
     for k, v in fp.results['Task3'].per_host['oldest'].items():
-        # print(v, type(v))
         print('\t\t {0} = {1}'.format(k, v.strftime('%b %d %H:%M:%S')))
     print('Per host oldest: ')
     for k, v in fp.results['Task3'].per_host['newest'].items():
-        # print(v, type(v))
         print('\t\t {0} = {1}'.format(k, v.strftime('%b %d %H:%M:%S')))
     print('*********************************************************************\n\n')
 

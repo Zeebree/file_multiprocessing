@@ -30,10 +30,10 @@ with open(FILE_PATH, 'wb') as f:
     for i in range(RANGE_1):
         for j in range(RANGE_2):
             f.write(log)
-        f.write(b"<33>Sep 21 22:22:22 monty_pythonhost99 Life of Brian\n")     # Alert severity
+        f.write(b"<33>Sep 21 22:22:22 monty Life of Brian\n")     # Alert severity
 
     # Newest message and Emergency severity
-    f.write(b"<24>Dec 31 23:23:23 monty_python_host42 always look on the bride side of your life\n")
+    f.write(b"<24>Dec 31 23:23:23 monty42 always look on the bride side of your life\n")
 
 print('done')
 

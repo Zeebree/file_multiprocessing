@@ -56,6 +56,7 @@ I run app on logs of different size:
  - Processing 11GB  (160 millions of lines) file takes about 3179 seconds, 4 process    
  
  Environment:
+ - Python 3.6.5 (v3.6.5:f59c0932b4, Mar 28 2018, 16:07:46) [MSC v.1900 32 bit (Intel)] on win32
  - CPU i5-3570 from 2011
  - RAM 8GB
  - Win10
